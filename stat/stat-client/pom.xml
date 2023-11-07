@@ -10,10 +10,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>ru.practicum</groupId>
     <artifactId>stat-client</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -33,6 +30,15 @@
             <artifactId>dto</artifactId>
             <version>1.0.0</version>
         </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
