@@ -30,6 +30,12 @@
             <artifactId>dto</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <classifier>osx-aarch_64</classifier>
+            <version>4.1.72.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
