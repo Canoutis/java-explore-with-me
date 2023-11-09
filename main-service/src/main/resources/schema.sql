@@ -29,7 +29,6 @@ create table if not exists event (
   state VARCHAR(50) NOT NULL,
   published_time TIMESTAMP WITHOUT TIME ZONE,
   created_on TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  views BIGINT,
   CONSTRAINT pk_event PRIMARY KEY (id),
   CONSTRAINT fk_event_cat FOREIGN KEY (category_id) REFERENCES category(id) ON delete RESTRICT ON update RESTRICT
 );

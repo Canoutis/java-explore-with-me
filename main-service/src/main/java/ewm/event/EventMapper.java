@@ -29,7 +29,6 @@ public class EventMapper {
                 .state(event.getState())
                 .createdOn(event.getCreatedOn())
                 .publishedOn(event.getPublishedTime())
-                .views(event.getViews())
                 .build();
     }
 
@@ -52,7 +51,6 @@ public class EventMapper {
                 .state(event.getState())
                 .createdOn(event.getCreatedOn())
                 .publishedOn(event.getPublishedTime())
-                .views(event.getViews())
                 .confirmedRequests(confirmedCount == null ? 0 : confirmedCount)
                 .build();
     }

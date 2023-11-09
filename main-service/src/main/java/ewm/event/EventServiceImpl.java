@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -231,15 +232,14 @@ public class EventServiceImpl implements EventService {
                 .uri(uri)
                 .timestamp(LocalDateTime.now())
                 .build();
-        statClient.hitRequest(requestHitDto);
-
         Event event = findEventById(eventRepository, eventId);
+        statClient.hitRequest(requestHitDto);
         if (event.getState() == EventState.PUBLISHED) {
-            eventRepository.updateViewsById(event.getViews(), eventId);
-            event.setViews(event.getViews() + 1);
             long confirmedCount = requestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
             EventOutputDto eventOutputDto = EventMapper.toDto(event);
             eventOutputDto.setConfirmedRequests(confirmedCount);
+            eventOutputDto.setViews(statClient.getRequestHitInfoDto(eventOutputDto.getCreatedOn(),
+                    LocalDateTime.now(), Collections.singletonList(uri), true).size());
             return eventOutputDto;
         } else {
             throw new ObjectNotFoundException(String.format("Событие с id=%d не найдено!", eventId));

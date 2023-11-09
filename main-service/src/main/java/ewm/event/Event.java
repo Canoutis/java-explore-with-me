@@ -56,5 +56,4 @@ public class Event {
     private EventState state;
     @Column(name = "published_time")
     private LocalDateTime publishedTime;
-    private long views;
 }

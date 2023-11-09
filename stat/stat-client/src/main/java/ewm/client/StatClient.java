@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,23 +28,20 @@ public class StatClient {
 
     public List<RequestHitInfoDto> getRequestHitInfoDto(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        StringBuilder uri = new StringBuilder(statServerBaseUrl + "/stats?start=" +
-                URLEncoder.encode(start.format(dateTimeFormatter), StandardCharsets.UTF_8) + "&end=" +
-                URLEncoder.encode(end.format(dateTimeFormatter), StandardCharsets.UTF_8) +
-                (unique != null ? "&" + unique : ""));
+        StringBuilder uri = new StringBuilder("/stats?start=" + start.format(dateTimeFormatter) +
+                "&end=" + end.format(dateTimeFormatter) + (unique != null ? "&" + unique : ""));
         if (uris != null) uris.forEach(element -> uri.append("&uris=").append(element));
-        return webClientBuilder.build()
-                .get()
+        return webClientBuilder.baseUrl(statServerBaseUrl).build().get()
                 .uri(uri.toString())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<RequestHitInfoDto>>() {
-                }).block();
+                .bodyToMono(List.class)
+                .block();
     }
 
     public RequestHitDto hitRequest(RequestHitDto requestHitDto) {
-        return webClientBuilder.build()
+        return webClientBuilder.baseUrl(statServerBaseUrl).build()
                 .post()
-                .uri(statServerBaseUrl + "/hit")
+                .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromValue(requestHitDto))
                 .retrieve()
