@@ -4,5 +4,5 @@ create table if not exists request (
   uri VARCHAR(2048) NOT NULL,
   ip VARCHAR(45) NOT NULL,
   date_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  CONSTRAINT pk_user PRIMARY KEY (id)
+  CONSTRAINT pk_request PRIMARY KEY (id)
 );

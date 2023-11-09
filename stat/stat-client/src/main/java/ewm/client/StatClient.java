@@ -2,6 +2,7 @@ package ewm.client;
 
 import ewm.model.RequestHitDto;
 import ewm.model.RequestHitInfoDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,7 @@ public class StatClient {
     private final WebClient.Builder webClientBuilder;
     private final String statServerBaseUrl;
 
+    @Autowired
     public StatClient(WebClient.Builder webClientBuilder, @Value("${stat.server.base.url}") String statServerBaseUrl) {
         this.webClientBuilder = webClientBuilder;
         this.statServerBaseUrl = statServerBaseUrl;
