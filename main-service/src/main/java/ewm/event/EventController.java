@@ -92,7 +92,7 @@ public class EventController {
                                                                     @RequestParam(required = false) String rangeStart,
                                                                     @RequestParam(required = false) String rangeEnd,
                                                                     @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-                                                                    @RequestParam(required = false) String sort,
+                                                                    @RequestParam(required = false) EventState.Sort sort,
                                                                     @RequestParam(defaultValue = "0", required = false) Integer from,
                                                                     @RequestParam(defaultValue = "10", required = false) Integer size,
                                                                     HttpServletRequest req) {

@@ -20,7 +20,7 @@ public interface EventService {
 
     List<EventOutputDto> findEventsByFilters(List<Integer> users, List<String> states, List<Integer> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
 
-    List<EventOutputDto> findEventsByFilters(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size, String ip, String uri);
+    List<EventOutputDto> findEventsByFilters(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, EventState.Sort sort, Integer from, Integer size, String ip, String uri);
 
     EventOutputDto updateEventByIdByAdmin(long eventId, EventUpdateDto eventUpdateDto);
 

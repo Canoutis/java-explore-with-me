@@ -51,8 +51,8 @@ public class EventMapper {
                 .state(event.getState())
                 .createdOn(event.getCreatedOn())
                 .publishedOn(event.getPublishedTime())
-                .confirmedRequests(confirmedCount == null ? 0 : confirmedCount)
-                .views(hits == null ? 0 : hits)
+                .confirmedRequests(confirmedCount)
+                .views(hits)
                 .build();
     }
 

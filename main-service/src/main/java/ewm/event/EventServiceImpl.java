@@ -141,7 +141,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventOutputDto> findEventsByFilters(String text, List<Integer> categories, Boolean paid,
                                                     String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                                    String sort, Integer from, Integer size, String ip, String uri) {
+                                                    EventState.Sort sort, Integer from, Integer size, String ip, String uri) {
         RequestHitDto requestHitDto = RequestHitDto.builder()
                 .app("ewm")
                 .ip(ip)
@@ -175,14 +175,14 @@ public class EventServiceImpl implements EventService {
         spec = spec.and(EventSpecification.dateBetween(rangeStart, rangeEnd));
 
         PageRequest pageable = PageRequest.of(from > 0 ? from / size : 0, size);
-        if (sort != null && sort.equals("EVENT_DATE"))
+        if (sort == EventState.Sort.EVENT_DATE)
             pageable = pageable.withSort(Sort.by(Sort.Direction.DESC, "eventDate"));
 
         List<EventOutputDto> events = loadEventHitsAndRequestsAndMap(eventRepository.findAll(spec, pageable), uri);
 
-        if (sort != null && sort.equals("VIEWS"))
+        if (sort == EventState.Sort.VIEWS)
             events = events.stream()
-                    .sorted(Comparator.comparingLong(EventOutputDto::getId).reversed()).collect(Collectors.toList());
+                    .sorted(Comparator.comparingLong(EventOutputDto::getViews).reversed()).collect(Collectors.toList());
 
         return events;
     }
@@ -359,7 +359,8 @@ public class EventServiceImpl implements EventService {
         }
 
         return events.stream()
-                .map(event -> EventMapper.toDto(event, requestsCountByEventId.get(event.getId()), eventIdHitsCount.get(event.getId())))
+                .map(event -> EventMapper.toDto(event, requestsCountByEventId.getOrDefault(event.getId(), 0L),
+                        eventIdHitsCount.getOrDefault(event.getId(), 0L)))
                 .collect(Collectors.toList());
     }
 }

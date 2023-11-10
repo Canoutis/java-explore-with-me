@@ -12,4 +12,9 @@ public enum EventState {
         PUBLISH_EVENT,
 
     }
+
+    public enum Sort {
+        VIEWS,
+        EVENT_DATE
+    }
 }
