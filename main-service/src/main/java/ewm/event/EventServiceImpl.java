@@ -284,7 +284,8 @@ public class EventServiceImpl implements EventService {
                     requestRepository.updateRequestStatusByIds(RequestStatus.CONFIRMED, ids);
                     confirmedRequests.addAll(requestRepository.findByIdIn(ids)
                             .stream().map(RequestMapper::toDto).collect(Collectors.toList()));
-                } else {//Если все заявки из запроса не вмещаются в квоту, то пробуем занять все квоты
+                } else {
+                    //Если все заявки из запроса не вмещаются в квоту, то пробуем занять все квоты
                     int index = 0;
                     while (freeQuota > 0) {
                         int confirmed = requestRepository.updateRequestStatusByIds(RequestStatus.CONFIRMED,
