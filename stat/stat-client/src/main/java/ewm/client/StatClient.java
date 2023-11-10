@@ -29,12 +29,13 @@ public class StatClient {
     public List<RequestHitInfoDto> getRequestHitInfoDto(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         StringBuilder uri = new StringBuilder("/stats?start=" + start.format(dateTimeFormatter) +
-                "&end=" + end.format(dateTimeFormatter) + (unique != null ? "&" + unique : ""));
+                "&end=" + end.format(dateTimeFormatter) + (unique != null ? "&unique=" + unique : ""));
         if (uris != null) uris.forEach(element -> uri.append("&uris=").append(element));
         return webClientBuilder.baseUrl(statServerBaseUrl).build().get()
                 .uri(uri.toString())
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToMono(new ParameterizedTypeReference<List<RequestHitInfoDto>>() {
+                })
                 .block();
     }
 

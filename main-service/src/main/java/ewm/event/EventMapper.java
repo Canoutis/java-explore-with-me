@@ -32,7 +32,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventOutputDto toDto(Event event, Long confirmedCount) {
+    public static EventOutputDto toDto(Event event, Long confirmedCount, Long hits) {
         return EventOutputDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -52,6 +52,7 @@ public class EventMapper {
                 .createdOn(event.getCreatedOn())
                 .publishedOn(event.getPublishedTime())
                 .confirmedRequests(confirmedCount == null ? 0 : confirmedCount)
+                .views(hits == null ? 0 : hits)
                 .build();
     }
 

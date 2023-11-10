@@ -10,6 +10,7 @@ import ewm.exception.BadRequestException;
 import ewm.exception.ConflictRequestException;
 import ewm.exception.ObjectNotFoundException;
 import ewm.model.RequestHitDto;
+import ewm.model.RequestHitInfoDto;
 import ewm.request.Request;
 import ewm.request.RequestMapper;
 import ewm.request.RequestRepository;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -132,18 +134,8 @@ public class EventServiceImpl implements EventService {
         }
         PageRequest pageable = PageRequest.of(from > 0 ? from / size : 0, size);
         List<Event> events = eventRepository.findAll(spec, pageable);
-        List<Object[]> eventIdAndCount = requestRepository
-                .countConfirmedRequestsByEventIds(events.stream().map(Event::getId).collect(Collectors.toList()));
 
-        HashMap<Long, Long> requestsCountByEventId = new HashMap<>();
-        for (Object[] row : eventIdAndCount) {
-            Long eventId = (Long) row[0];
-            Long requestCount = (Long) row[1];
-            requestsCountByEventId.put(eventId, requestCount);
-        }
-        return events.stream()
-                .map(event -> EventMapper.toDto(event, requestsCountByEventId.get(event.getId())))
-                .collect(Collectors.toList());
+        return loadEventHitsAndRequestsAndMap(events, "/events");
     }
 
     @Override
@@ -183,23 +175,16 @@ public class EventServiceImpl implements EventService {
         spec = spec.and(EventSpecification.dateBetween(rangeStart, rangeEnd));
 
         PageRequest pageable = PageRequest.of(from > 0 ? from / size : 0, size);
-        if (sort != null) {
-            if (sort.equals("EVENT_DATE")) pageable = pageable.withSort(Sort.by(Sort.Direction.DESC, "eventDate"));
-            else if (sort.equals("VIEWS")) pageable = pageable.withSort(Sort.by(Sort.Direction.DESC, "views"));
-        }
-        List<Event> events = eventRepository.findAll(spec, pageable);
-        List<Object[]> eventIdAndCount = requestRepository
-                .countConfirmedRequestsByEventIds(events.stream().map(Event::getId).collect(Collectors.toList()));
+        if (sort != null && sort.equals("EVENT_DATE"))
+            pageable = pageable.withSort(Sort.by(Sort.Direction.DESC, "eventDate"));
 
-        HashMap<Long, Long> requestsCountByEventId = new HashMap<>();
-        for (Object[] row : eventIdAndCount) {
-            Long eventId = (Long) row[0];
-            Long requestCount = (Long) row[1];
-            requestsCountByEventId.put(eventId, requestCount);
-        }
-        return events.stream()
-                .map(event -> EventMapper.toDto(event, requestsCountByEventId.get(event.getId())))
-                .collect(Collectors.toList());
+        List<EventOutputDto> events = loadEventHitsAndRequestsAndMap(eventRepository.findAll(spec, pageable), uri);
+
+        if (sort != null && sort.equals("VIEWS"))
+            events = events.stream()
+                    .sorted(Comparator.comparingLong(EventOutputDto::getId).reversed()).collect(Collectors.toList());
+
+        return events;
     }
 
     @Override
@@ -239,7 +224,7 @@ public class EventServiceImpl implements EventService {
             EventOutputDto eventOutputDto = EventMapper.toDto(event);
             eventOutputDto.setConfirmedRequests(confirmedCount);
             eventOutputDto.setViews(statClient.getRequestHitInfoDto(eventOutputDto.getCreatedOn(),
-                    LocalDateTime.now(), Collections.singletonList(uri), true).size());
+                    LocalDateTime.now(), Collections.singletonList(uri), true).get(0).getHits());
             return eventOutputDto;
         } else {
             throw new ObjectNotFoundException(String.format("Событие с id=%d не найдено!", eventId));
@@ -346,5 +331,35 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateDto.getTitle() != null && !eventUpdateDto.getTitle().isEmpty()) {
             event.setTitle(eventUpdateDto.getTitle());
         }
+    }
+
+    private List<EventOutputDto> loadEventHitsAndRequestsAndMap(List<Event> events, String uri) {
+
+        List<Object[]> eventIdAndCount = requestRepository
+                .countConfirmedRequestsByEventIds(events.stream().map(Event::getId).collect(Collectors.toList()));
+
+        HashMap<Long, Long> requestsCountByEventId = new HashMap<>();
+        for (Object[] row : eventIdAndCount) {
+            Long eventId = (Long) row[0];
+            Long requestCount = (Long) row[1];
+            requestsCountByEventId.put(eventId, requestCount);
+        }
+
+        LocalDateTime start = LocalDateTime.now();
+        List<String> uris = new ArrayList<>();
+        for (Event event : events) {
+            if (event.getEventDate().isBefore(start)) start = event.getEventDate();
+            uris.add(uri + "/" + event.getId());
+        }
+
+        List<RequestHitInfoDto> requestHits = statClient.getRequestHitInfoDto(start, LocalDateTime.now(), uris, true);
+        HashMap<Long, Long> eventIdHitsCount = new HashMap<>();
+        for (RequestHitInfoDto hit : requestHits) {
+            eventIdHitsCount.put(Long.parseLong(hit.getUri().split("/")[3]), hit.getHits());
+        }
+
+        return events.stream()
+                .map(event -> EventMapper.toDto(event, requestsCountByEventId.get(event.getId()), eventIdHitsCount.get(event.getId())))
+                .collect(Collectors.toList());
     }
 }
