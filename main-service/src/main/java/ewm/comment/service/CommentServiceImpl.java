@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import static ewm.utils.Helper.findEventById;
 import static ewm.utils.Helper.findUserById;
 
 @Service
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -64,11 +66,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentShortResultDto addComment(Integer userId, Long eventId, CommentRequestDto commentRequest) {
         return addComment(userId, eventId, null, commentRequest);
     }
 
     @Override
+    @Transactional
     public CommentShortResultDto addComment(Integer userId, Long eventId, Long parentCommentId, CommentRequestDto commentRequest) {
         User author = findUserById(userRepository, userId);
         if (blackListRepository.existsByPersonId(userId)) {
@@ -90,6 +94,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentShortResultDto updateComment(Integer userId, Long commentId, CommentRequestDto commentRequest) {
         findUserById(userRepository, userId);
         Comment comment = findCommentById(commentId);
@@ -116,6 +121,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Integer userId, Long commentId) {
         findUserById(userRepository, userId);
         Comment comment = findCommentById(commentId);
@@ -153,6 +159,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void reportComment(Integer userId, Long commentId) {
         User user = findUserById(userRepository, userId);
         Comment comment = findCommentById(commentId);
@@ -196,6 +203,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentResultDto handleCommentReport(Long reportId, Report.State state) {
         Optional<Report> reportOptional = reportRepository.findById(reportId);
         if (reportOptional.isEmpty() || reportOptional.get().getState() == Report.State.PROCESSED) {
@@ -213,6 +221,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public List<CommentResultDto> changeCommentsStatuses(List<Long> commentIds, ModerationState state) {
         commentRepository.updateStateByIdIn(state, commentIds);
         List<Comment> comments = commentRepository.findByIdIn(commentIds, Sort.by(Sort.Direction.ASC, "created"));
@@ -220,6 +229,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public BlackListDto blockUser(Integer userId, Long commentId) {
         User user = findUserById(userRepository, userId);
         Comment comment = findCommentById(commentId);

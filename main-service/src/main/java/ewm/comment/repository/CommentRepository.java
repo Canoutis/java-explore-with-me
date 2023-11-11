@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +19,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByIdIn(Collection<Long> ids, Sort sort);
 
-    @Transactional
     @Modifying
     @Query("update Comment c set c.state = ?1 where c.id in ?2")
     void updateStateByIdIn(ModerationState state, Collection<Long> ids);
