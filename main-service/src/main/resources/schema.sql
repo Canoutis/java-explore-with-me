@@ -68,10 +68,10 @@ create table if not exists comment (
   parent_comment_id BIGINT,
   anonymous BOOLEAN NOT NULL,
   updated BOOLEAN NOT NULL,
-  CONSTRAINT pk_comment PRIMARY KEY (id)
+  CONSTRAINT pk_comment PRIMARY KEY (id),
   CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users(id) ON delete CASCADE ON update RESTRICT,
   CONSTRAINT fk_parent_comment_id FOREIGN KEY (parent_comment_id) REFERENCES comment(id) ON delete CASCADE ON update RESTRICT,
-  CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES event(id) ON delete CASCADE ON update RESTRICT,
+  CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES event(id) ON delete CASCADE ON update RESTRICT
 );
 
 create table if not exists black_list (
@@ -80,7 +80,7 @@ create table if not exists black_list (
   comment_id BIGINT NOT NULL,
   CONSTRAINT pk_black_list PRIMARY KEY (id),
   CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES users(id) ON delete CASCADE ON update RESTRICT,
-  CONSTRAINT fk_comment_id FOREIGN KEY (comment_id) REFERENCES comment(id) ON delete CASCADE ON update RESTRICT,
+  CONSTRAINT fk_comment_id FOREIGN KEY (comment_id) REFERENCES comment(id) ON delete CASCADE ON update RESTRICT
 );
 
 create table if not exists report (
@@ -89,7 +89,7 @@ create table if not exists report (
   comment_id BIGINT NOT NULL,
   state VARCHAR(50) NOT NULL,
   created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  CONSTRAINT pk_report PRIMARY KEY (id)
+  CONSTRAINT pk_report PRIMARY KEY (id),
   CONSTRAINT fk_initiator_id FOREIGN KEY (initiator_id) REFERENCES users(id) ON delete CASCADE ON update RESTRICT,
-  CONSTRAINT fk_comment_id FOREIGN KEY (comment_id) REFERENCES users(id) ON delete CASCADE ON update RESTRICT,
+  CONSTRAINT fk_comment_id FOREIGN KEY (comment_id) REFERENCES users(id) ON delete CASCADE ON update RESTRICT
 );
