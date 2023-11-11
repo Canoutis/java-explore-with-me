@@ -33,7 +33,7 @@ public class RequestController {
 
     @PostMapping("/hit")
     public ResponseEntity<RequestHitDto> create(@Valid @RequestBody RequestHitDto requestHitDto) {
-        return new ResponseEntity<>(requestService.create(requestHitDto), HttpStatus.OK);
+        return new ResponseEntity<>(requestService.create(requestHitDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/stats")

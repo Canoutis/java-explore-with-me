@@ -1,5 +1,6 @@
 package ewm.service;
 
+import ewm.exception.BadRequestException;
 import ewm.mapper.RequestMapper;
 import ewm.model.Request;
 import ewm.model.RequestHitDto;
@@ -35,6 +36,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestHitInfoDto> getStatistic(LocalDateTime start, LocalDateTime end,
                                                 List<String> uris, boolean unique) {
+        if (end.isBefore(start)) {
+            throw new BadRequestException("Некорректные параметры фильтра.");
+        }
         List<RequestHitInfoDto> hits;
         if (uris == null || uris.isEmpty()) {
             if (unique) hits = requestRepository.findByDateUnique(start, end);
