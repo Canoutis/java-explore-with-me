@@ -14,6 +14,8 @@ import java.util.Optional;
 public class Helper {
 
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final User ANONYMOUS = User.builder().id(-451).name("Анонимный пользователь").build();
+    public static final String DELETED_COMMENT = "Удаленный комментарий.";
 
     public static User findUserById(UserRepository repository, Integer id) {
         Optional<User> user = repository.findById(id);

@@ -1,0 +1,1536 @@
+{
+  "info": {
+    "_postman_id": "9e52efb9-f080-41fa-b939-f1c19f3dd1ef",
+    "name": "\"Explore with me\" Фича \"Комментарии\"",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20757285"
+  },
+  "item": [
+    {
+      "name": "Pre-load",
+      "item": [
+        {
+          "name": "Добавить пользователя id=1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.email).to.exist.and.to.be.a('string');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.length.above(0, \"Name should be a non-empty string\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"user1\",\n    \"email\": \"user1@user.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавить категорию id=1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields - id and name\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist.and.to.be.a('number', \"id should be a number\");",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string', \"name should be a string\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the id is a positive integer\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.id).to.be.a('number').and.to.be.above(0);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Литературный салон\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавить событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'id' field in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'annotation' field is a string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData.annotation).to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'category' object in the response\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.category).to.exist.and.to.be.an('object');",
+                  "    pm.expect(responseData.category.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.category.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the initiator object has the id and name fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.initiator).to.exist;",
+                  "    pm.expect(responseData.initiator).to.be.an('object');",
+                  "    pm.expect(responseData.initiator.id).to.exist;",
+                  "    pm.expect(responseData.initiator.name).to.exist;",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"annotation\": \"Reprehenderit enim rem quod commodi id dolores. Laborum est aut consequatur eum rem. Quos porro quasi animi et magnam libero ipsam. Reprehenderit provident at sed. Placeat adipisci reprehenderit voluptatem laborum quia.\",\n    \"category\": 1,\n    \"description\": \"Ut non sapiente ut. Iusto mollitia veritatis consequatur voluptatem nam. Nulla error nobis ad. Quibusdam ad neque maiores ut animi sint. Voluptatem quia sunt aut. Animi cupiditate nihil et natus soluta voluptatem.\\n \\rCommodi dolorum sed voluptatem omnis dolorem aut fuga suscipit aut. Pariatur repellendus sed qui laudantium. Eum suscipit non aliquam quis eos necessitatibus reprehenderit ut molestiae.\\n \\rEnim possimus occaecati commodi atque doloremque. Et incidunt quia necessitatibus ut illum. Ut voluptas modi repellat eum cum enim. Quia ea dignissimos. Non et quod recusandae rerum corrupti quia.\",\n    \"eventDate\": \"2023-12-31 22:00:00\",\n    \"location\": {\n        \"lat\": 72.7918,\n        \"lon\": -118.6866\n    },\n    \"paid\": \"false\",\n    \"participantLimit\": \"282\",\n    \"requestModeration\": \"true\",\n    \"title\": \"Occaecati aspernatur maiores ut sed.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавить пользователя id = 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.email).to.exist.and.to.be.a('string');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.length.above(0, \"Name should be a non-empty string\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response time is less than 200ms\", function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(200);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"user2\",\n    \"email\": \"user2@user.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавить пользователя id = 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.email).to.exist.and.to.be.a('string');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.length.above(0, \"Name should be a non-empty string\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response time is less than 200ms\", function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"user3\",\n    \"email\": \"user3@user.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Утверждение события id = 1 PUBLISHED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the id field in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the category object in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.category).to.exist.and.to.be.an('object');",
+                  "  pm.expect(responseData.category.id).to.exist.and.to.be.a('number');",
+                  "  pm.expect(responseData.category.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the initiator object in the response\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.initiator).to.exist.and.to.be.an('object');",
+                  "    pm.expect(responseData.initiator.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.initiator.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The 'createdOn' field is not empty\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.createdOn).to.exist.and.to.not.be.empty;",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"stateAction\": \"PUBLISH_EVENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/events/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "events",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user-activity",
+      "item": [
+        {
+          "name": "Добавление комментария от userId = 2 на событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.eventId).to.exist;",
+                  "    pm.expect(responseData.authorId).to.exist;",
+                  "    pm.expect(responseData.text).to.exist;",
+                  "    pm.expect(responseData.created).to.exist;",
+                  "    pm.expect(responseData.updated).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Id, eventId, and authorId are non-negative integers\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.eventId).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.authorId).to.be.a('number').and.to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.text).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Text should not be empty\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Я безумно счастлив, что попаду на это событие!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "2"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error. Добавление комментария от userId = 2 на событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 400\", function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.errors).to.exist;",
+                  "    pm.expect(responseData.message).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Id, eventId, and authorId are non-negative integers\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.not.exist;",
+                  "    pm.expect(responseData.eventId).to.not.exist;",
+                  "    pm.expect(responseData.authorId).to.not.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.text).to.not.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Я безумно счастлив, что попаду на это событие!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "2"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление под комментария от userId = 3 на событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.eventId).to.exist;",
+                  "    pm.expect(responseData.authorId).to.exist;",
+                  "    pm.expect(responseData.text).to.exist;",
+                  "    pm.expect(responseData.created).to.exist;",
+                  "    pm.expect(responseData.updated).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Id, eventId, and authorId are non-negative integers\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.eventId).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.authorId).to.be.a('number').and.to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.text).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Text should not be empty\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Полностью тебя не поддерживаю!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "3"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                },
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error. Добавление под комментария от userId = 3 на событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 400\", function () {",
+                  "    pm.expect(pm.response.code).to.equal(400);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate that the 'errors' field is present in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData.errors).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate that the 'message' field is present in the response\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.message).to.equals(\"Допустим только 1 уровень подкомментирования.\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Полностью тебя поддерживаю!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "2"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                },
+                {
+                  "key": "commentId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение комментария id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'id' field is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.id).to.be.a('number');",
+                  "    pm.expect(responseData.id).to.be.gte(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the author object\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData.author).to.exist.and.to.be.an('object');",
+                  "    pm.expect(responseData.author.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.author.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'text' field is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData.text).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление под комментария от userId = 2 на событие id = 1. Ответка",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.eventId).to.exist;",
+                  "    pm.expect(responseData.authorId).to.exist;",
+                  "    pm.expect(responseData.text).to.exist;",
+                  "    pm.expect(responseData.created).to.exist;",
+                  "    pm.expect(responseData.updated).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Id, eventId, and authorId are non-negative integers\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.eventId).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.authorId).to.be.a('number').and.to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.text).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Text should not be empty\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Ну о вкусах не спорят, молодой человек! Каждому в меру своих интеллектуальных способностей!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "2"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                },
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Получение подкомментариев по комментарию id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'id' field is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    ",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment.id).to.be.a('number').and.to.be.greaterThan(-1, \"ID should be a non-negative integer\");",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'author' object is present in each element of the response array and contains the expected fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    ",
+                  "    responseData.forEach(function(element) {",
+                  "        pm.expect(element.author).to.exist.and.to.be.an('object');",
+                  "        pm.expect(element.author.id).to.exist.and.to.be.a('number');",
+                  "        pm.expect(element.author.name).to.exist.and.to.be.a('string');",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'text' field is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment.text).to.be.a('string').and.to.not.be.empty;",
+                  "    });",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments/1/children",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "1",
+                "children"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление под комментария от userId = 3 на событие id = 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.eventId).to.exist;",
+                  "    pm.expect(responseData.authorId).to.exist;",
+                  "    pm.expect(responseData.text).to.exist;",
+                  "    pm.expect(responseData.created).to.exist;",
+                  "    pm.expect(responseData.updated).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Id, eventId, and authorId are non-negative integers\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.eventId).to.be.a('number').and.to.be.at.least(0);",
+                  "    pm.expect(responseData.authorId).to.be.a('number').and.to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.text).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Text should not be empty\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Ты меня сейчас оскорбил? Ты напыщенный пижон!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events/:eventId/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events",
+                ":eventId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "3"
+                },
+                {
+                  "key": "eventId",
+                  "value": "1"
+                },
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Жалоба от userId = 2 на userId = 3 на commentId = 4",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments/:commentId/report",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments",
+                ":commentId",
+                "report"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "3"
+                },
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление текста комментария",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the response body has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.id).to.exist;",
+                  "    pm.expect(responseData.eventId).to.exist;",
+                  "    pm.expect(responseData.authorId).to.exist;",
+                  "    pm.expect(responseData.text).to.exist;",
+                  "    pm.expect(responseData.created).to.exist;",
+                  "    pm.expect(responseData.parentCommentId).to.exist;",
+                  "    pm.expect(responseData.updated).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate id is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.id).to.exist.and.to.be.a('number').and.to.satisfy((id) => id >= 0, \"id should be a non-negative integer\");",
+                  "});",
+                  "",
+                  "pm.test(\"Text is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.text).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Text should not be empty\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Уважаемый, с этим я могу согласиться. Вероятно ваши интеллектуальные способности ограничиваются второсортными посиделками!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "3"
+                },
+                {
+                  "key": "commentId",
+                  "value": "4"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin-activity",
+      "item": [
+        {
+          "name": "Admin. Получение списка жалоб.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the response is an array\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'id' field in each object of the array\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+                  "    ",
+                  "    responseData.forEach(function (object) {",
+                  "        pm.expect(object.id).to.exist.and.to.be.a('number');",
+                  "    });",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/comments/reports",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "comments",
+                "reports"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Получение списка жалоб. Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'id' field in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the author object in the response\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData.author).to.exist.and.to.be.an('object');",
+                  "    pm.expect(responseData.author.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.author.name).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'text' field in the response\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.text).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the 'created' field in the response\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.created).to.exist.and.to.be.a('string');",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/comments/reports/1?state=DELETE_COMMENT",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "comments",
+                "reports",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "DELETE_COMMENT"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Получение списка комментариев по фильтрам",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array with at least one element\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Each comment object has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment).to.have.property('id');",
+                  "        pm.expect(comment).to.have.property('author');",
+                  "        pm.expect(comment).to.have.property('text');",
+                  "        pm.expect(comment).to.have.property('created');",
+                  "        pm.expect(comment).to.have.property('childComments');",
+                  "        pm.expect(comment).to.have.property('updated');",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Author name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment.author.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Author name should not be empty\");",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The created field is in a valid date and time format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment.created).to.match(/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/);",
+                  "    });",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/comments?state=PUBLISHED&rangeStart=2023-11-11 03:00:00&rangeEng=2023-12-31 03:00:00",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "PUBLISHED"
+                },
+                {
+                  "key": "rangeStart",
+                  "value": "2023-11-11 03:00:00"
+                },
+                {
+                  "key": "rangeEng",
+                  "value": "2023-12-31 03:00:00"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Изменение статуса",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the response body is an array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'id' field is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    responseData.forEach(function(comment) {",
+                  "        pm.expect(comment.id).to.be.a('number');",
+                  "        pm.expect(comment.id).to.be.at.least(0);",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the 'author' field is an object with 'id' and 'name' fields\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "  ",
+                  "  responseData.forEach(function(comment) {",
+                  "    pm.expect(comment.author).to.be.an('object');",
+                  "    pm.expect(comment.author.id).to.exist.and.to.be.a('number');",
+                  "    pm.expect(comment.author.name).to.exist.and.to.be.a('string');",
+                  "  });",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/comments?commentIds=2&state=DELETED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "commentIds",
+                  "value": "2"
+                },
+                {
+                  "key": "state",
+                  "value": "DELETED"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
